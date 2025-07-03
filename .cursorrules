@@ -1,0 +1,76 @@
+# Educational and Research Platform - Renewable Energy Monitoring
+# React + Vite + TypeScript Configuration
+
+## Project Context
+You are working on a "Real-time Monitoring Educational and Research Platform for Integrated Renewable Energy Sources and Energy Storage Systems" frontend. This is an educational platform with 4 technological phases: Hardware Integration, Cloud Infrastructure, Web Platform Development, and Visualization and Analytics. Currently focusing on Web Platform Development frontend only.
+
+## Tech Stack
+- Frontend: React 18 + Vite + TypeScript
+- Styling: Tailwind CSS
+- Routing: React Router v6
+- Data Visualization: Recharts (+ D3 for custom charts)
+- Communication: REST + WebSockets (for real-time data)
+- State Management: React Context API + useReducer
+
+## Architecture Guidelines
+- Use functional components with hooks
+- Implement proper TypeScript interfaces for all data structures
+- Follow component composition patterns
+- Use React Router for navigation between pages
+- Implement responsive design with Tailwind CSS
+- Create reusable components for laboratory equipment dashboards
+- Use proper error handling and loading states
+
+## Component Structure
+- Page components in src/pages/
+- Reusable components in src/components/
+- Layout components in src/layouts/
+- Custom hooks in src/hooks/
+- Types and interfaces in src/types/
+- Utilities in src/utils/
+- API services in src/services/
+
+## Coding Standards
+- Use arrow functions for components
+- Implement proper TypeScript typing
+- Use meaningful component and variable names
+- Add JSDoc comments for complex functions
+- Implement proper error boundaries
+- Use semantic HTML elements
+- Follow accessibility best practices
+
+## Data Visualization
+- Use Recharts for standard charts and graphs
+- Implement real-time data updates for laboratory equipment
+- Create interactive dashboards with drill-down capabilities
+- Use proper color schemes for educational interfaces
+- Implement responsive charts that work on all devices
+
+## Real-time Features
+- Prepare for WebSocket integration for live data updates
+- Implement proper loading states for async operations
+- Use React Query or SWR for data fetching and caching
+- Handle connection states and reconnection logic
+
+## Educational Platform Features
+- Create clear navigation between different sections
+- Implement equipment detail pages with comprehensive information
+- Design interactive floor plan maps
+- Include proper documentation and help sections
+- Focus on user experience for educational purposes
+
+## File Organization
+- Group related components in folders
+- Use index.ts files for clean imports
+- Separate concerns (logic, presentation, styling)
+- Keep components small and focused
+- Use proper naming conventions
+
+## Always prioritize:
+1. Type safety with TypeScript
+2. Responsive design
+3. Performance optimization
+4. Accessibility
+5. Clean, maintainable code
+6. Educational user experience
+7. Real-time data handling capabilities

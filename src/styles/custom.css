@@ -1,0 +1,12 @@
+/* Custom styles for the Educational Platform */
+
+body {
+  background-color: theme('colors.background');
+  font-family: theme('fontFamily.sans');
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: theme('fontFamily.heading');
+}
+
+/* Add more custom styles as needed */ 
