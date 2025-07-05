@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import {
+  LineChart,
+  GaugeChart,
+  MultiAxisChart
+} from '../../components/charts';
 import type { 
   EquipmentDetail as EquipmentDetailType, 
   HistoricalData 
@@ -13,6 +18,7 @@ import {
   EquipmentSpecs, 
   EquipmentPhoto 
 } from '../../components/equipment';
+import { mockData } from '../../data/mockData';
 
 /**
  * Equipment Detail Page Component
@@ -28,6 +34,16 @@ const EquipmentDetail: React.FC = () => {
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Update current time every second for real-time displays
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch equipment details
   useEffect(() => {
@@ -58,6 +74,23 @@ const EquipmentDetail: React.FC = () => {
 
     fetchEquipment();
   }, [id]);
+
+  // Get equipment-specific data based on equipment type
+  const getEquipmentData = () => {
+    if (!id) return mockData.timeSeries.solarPanel;
+    
+    if (id.startsWith('1.1')) {
+      return mockData.timeSeries.solarPanel;
+    } else if (id.startsWith('2.1')) {
+      return mockData.timeSeries.windTurbine;
+    } else if (id.includes('battery') || id.includes('storage')) {
+      return mockData.timeSeries.battery;
+    } else if (id.includes('inverter')) {
+      return mockData.timeSeries.inverter;
+    }
+    
+    return mockData.timeSeries.solarPanel;
+  };
 
   // Handle control changes
   const handleControlChange = async (controlId: string, value: any): Promise<boolean> => {
@@ -131,6 +164,8 @@ const EquipmentDetail: React.FC = () => {
     );
   }
 
+  const equipmentData = getEquipmentData();
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Navigation Header */}
@@ -160,6 +195,9 @@ const EquipmentDetail: React.FC = () => {
             </h1>
             <p className="text-lg text-gray-600 mb-2">{equipment.type}</p>
             <p className="text-gray-500">{equipment.location}</p>
+            <p className="text-sm text-gray-400 mt-1">
+              Last updated: {currentTime.toLocaleTimeString()}
+            </p>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -176,6 +214,94 @@ const EquipmentDetail: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Real-Time Gauges Section */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Real-Time Equipment Status
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <GaugeChart
+            title="Power Output"
+            subtitle="Current power generation"
+            data={equipmentData}
+            value={Number(equipment.data.power) || 0}
+            min={0}
+            max={1000}
+            unit="W"
+            warningThreshold={800}
+            criticalThreshold={950}
+            height={250}
+            size={150}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true
+            }}
+            ariaLabel={`${equipment.name} power output gauge`}
+          />
+          
+          <GaugeChart
+            title="Voltage"
+            subtitle="Current voltage reading"
+            data={equipmentData}
+            value={Number(equipment.data.voltage) || 0}
+            min={200}
+            max={250}
+            unit="V"
+            warningThreshold={240}
+            criticalThreshold={245}
+            height={250}
+            size={150}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true
+            }}
+            ariaLabel={`${equipment.name} voltage gauge`}
+          />
+          
+          <GaugeChart
+            title="Temperature"
+            subtitle="Operating temperature"
+            data={equipmentData}
+            value={Number(equipment.data.temperature) || 0}
+            min={0}
+            max={80}
+            unit="°C"
+            warningThreshold={60}
+            criticalThreshold={70}
+            height={250}
+            size={150}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true
+            }}
+            ariaLabel={`${equipment.name} temperature gauge`}
+          />
+          
+          <GaugeChart
+            title="Efficiency"
+            subtitle="System efficiency"
+            data={equipmentData}
+            value={Number(equipment.data.efficiency) || 0}
+            min={0}
+            max={100}
+            unit="%"
+            warningThreshold={70}
+            criticalThreshold={60}
+            height={250}
+            size={150}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true
+            }}
+            ariaLabel={`${equipment.name} efficiency gauge`}
+          />
+        </div>
+      </section>
 
       {/* Equipment Photo and Description */}
       <section className="mb-8">
@@ -213,6 +339,52 @@ const EquipmentDetail: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Historical Data Charts */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          Historical Performance Data
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <LineChart
+            title="Power Output Over Time"
+            subtitle="Historical power generation trends"
+            data={equipmentData}
+            dataKeys={['power']}
+            xAxisLabel="Time"
+            yAxisLabel="Power (W)"
+            units={{ power: 'W' }}
+            height={300}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true,
+              exportAsCsv: true
+            }}
+            ariaLabel={`${equipment.name} power output historical chart`}
+          />
+          
+          <MultiAxisChart
+            title="Temperature vs Efficiency"
+            subtitle="Relationship between temperature and efficiency"
+            data={equipmentData}
+            primaryDataKeys={['temperature']}
+            secondaryDataKeys={['efficiency']}
+            xAxisLabel="Time"
+            primaryYAxisLabel="Temperature (°C)"
+            secondaryYAxisLabel="Efficiency (%)"
+            units={{ temperature: '°C', efficiency: '%' }}
+            height={300}
+            showExport={true}
+            exportOptions={{
+              exportAsPng: true,
+              exportAsSvg: true,
+              exportAsCsv: true
+            }}
+            ariaLabel={`${equipment.name} temperature vs efficiency chart`}
+          />
         </div>
       </section>
 
