@@ -8,6 +8,7 @@ const Home = lazy(() => import('./pages/Home'))
 const FloorPlan = lazy(() => import('./pages/FloorPlan'))
 const EquipmentDetail = lazy(() => import('./pages/EquipmentDetail'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
+const ChartsDemo = lazy(() => import('./pages/ChartsDemo'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Example navigation guard (placeholder)
@@ -38,6 +39,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/charts-demo" element={<ChartsDemo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

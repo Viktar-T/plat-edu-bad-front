@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Map, BarChart2, ArrowRight } from 'lucide-react';
+import { Map, BarChart2, ArrowRight, PieChart } from 'lucide-react';
 
 /**
  * Navigation card props for the Home page.
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
         </p>
       </section>
       {/* Navigation Cards */}
-      <section className="flex flex-col md:flex-row gap-10 w-full max-w-4xl items-center justify-center mb-16">
+      <section className="flex flex-col md:flex-row gap-10 w-full max-w-6xl items-center justify-center mb-16 flex-wrap">
         <NavCard
           title="Laboratory Floor Plan"
           description="View the interactive map of laboratory equipment and explore their locations."
@@ -80,6 +80,13 @@ const Home: React.FC = () => {
           to="/dashboard"
           icon={<BarChart2 strokeWidth={2.2} />}
           accentColor="green"
+        />
+        <NavCard
+          title="Charts Demo"
+          description="Explore comprehensive data visualization components including line charts, gauges, and more."
+          to="/charts-demo"
+          icon={<PieChart strokeWidth={2.2} />}
+          accentColor="purple"
         />
       </section>
     </main>

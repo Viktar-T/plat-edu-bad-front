@@ -156,6 +156,220 @@ export interface ChartConfig {
 }
 
 /**
+ * Base chart props interface
+ */
+export interface BaseChartProps {
+  /** Chart title */
+  title: string;
+  /** Chart subtitle or description */
+  subtitle?: string;
+  /** Data to display */
+  data: ChartData[];
+  /** Chart height in pixels */
+  height?: number;
+  /** Whether to show loading state */
+  loading?: boolean;
+  /** Error message to display */
+  error?: string;
+  /** Custom CSS class */
+  className?: string;
+  /** Whether to show export options */
+  showExport?: boolean;
+  /** Custom colors for the chart */
+  colors?: string[];
+  /** Whether to show grid lines */
+  showGrid?: boolean;
+  /** Whether to show legend */
+  showLegend?: boolean;
+  /** Accessibility label */
+  ariaLabel?: string;
+}
+
+/**
+ * Represents chart data for visualization
+ */
+export interface ChartData {
+  /** X-axis value (e.g., timestamp, category) - optional for flexibility */
+  x?: string | number;
+  /** Y-axis value(s) (e.g., measurement, value) */
+  [key: string]: number | string | undefined;
+}
+
+/**
+ * Line chart specific props
+ */
+export interface LineChartProps extends BaseChartProps {
+  /** Data keys to display as lines */
+  dataKeys: string[];
+  /** X-axis label */
+  xAxisLabel?: string;
+  /** Y-axis label */
+  yAxisLabel?: string;
+  /** Whether to show area under the line */
+  showArea?: boolean;
+  /** Whether to show dots on the line */
+  showDots?: boolean;
+  /** Units for each data key */
+  units?: Record<string, string>;
+  /** Custom tooltip formatter */
+  tooltipFormatter?: (value: any, name: string) => string;
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Bar chart specific props
+ */
+export interface BarChartProps extends BaseChartProps {
+  /** Data key for X-axis */
+  xKey: string;
+  /** Data keys to display as bars */
+  dataKeys: string[];
+  /** X-axis label */
+  xAxisLabel?: string;
+  /** Y-axis label */
+  yAxisLabel?: string;
+  /** Whether to stack bars */
+  stacked?: boolean;
+  /** Units for each data key */
+  units?: Record<string, string>;
+  /** Custom tooltip formatter */
+  tooltipFormatter?: (value: any, name: string) => string;
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Pie chart specific props
+ */
+export interface PieChartProps extends BaseChartProps {
+  /** Data key for values */
+  dataKey: string;
+  /** Data key for labels */
+  nameKey: string;
+  /** Whether to show percentage labels */
+  showPercentage?: boolean;
+  /** Whether to show value labels */
+  showValue?: boolean;
+  /** Inner radius for donut chart (0-1) */
+  innerRadius?: number;
+  /** Outer radius (0-1) */
+  outerRadius?: number;
+  /** Custom tooltip formatter */
+  tooltipFormatter?: (value: any, name: string) => string;
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Area chart specific props
+ */
+export interface AreaChartProps extends BaseChartProps {
+  /** Data keys to display as areas */
+  dataKeys: string[];
+  /** X-axis label */
+  xAxisLabel?: string;
+  /** Y-axis label */
+  yAxisLabel?: string;
+  /** Whether to stack areas */
+  stacked?: boolean;
+  /** Units for each data key */
+  units?: Record<string, string>;
+  /** Custom tooltip formatter */
+  tooltipFormatter?: (value: any, name: string) => string;
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Gauge chart specific props
+ */
+export interface GaugeChartProps extends BaseChartProps {
+  /** Current value */
+  value: number;
+  /** Minimum value */
+  min: number;
+  /** Maximum value */
+  max: number;
+  /** Unit of measurement */
+  unit: string;
+  /** Warning threshold */
+  warningThreshold?: number;
+  /** Critical threshold */
+  criticalThreshold?: number;
+  /** Gauge size */
+  size?: number;
+  /** Custom color ranges */
+  colorRanges?: {
+    min: number;
+    max: number;
+    color: string;
+  }[];
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Multi-axis chart specific props
+ */
+export interface MultiAxisChartProps extends BaseChartProps {
+  /** Data keys for primary Y-axis */
+  primaryDataKeys: string[];
+  /** Data keys for secondary Y-axis */
+  secondaryDataKeys?: string[];
+  /** X-axis label */
+  xAxisLabel?: string;
+  /** Primary Y-axis label */
+  primaryYAxisLabel?: string;
+  /** Secondary Y-axis label */
+  secondaryYAxisLabel?: string;
+  /** Units for each data key */
+  units?: Record<string, string>;
+  /** Custom tooltip formatter */
+  tooltipFormatter?: (value: any, name: string) => string;
+  /** Export options */
+  exportOptions?: ChartExportOptions;
+}
+
+/**
+ * Export options for charts
+ */
+export interface ChartExportOptions {
+  /** Export as PNG image */
+  exportAsPng?: boolean;
+  /** Export as SVG image */
+  exportAsSvg?: boolean;
+  /** Export as CSV data */
+  exportAsCsv?: boolean;
+  /** Custom filename prefix */
+  filenamePrefix?: string;
+}
+
+/**
+ * Chart theme configuration
+ */
+export interface ChartTheme {
+  /** Primary color */
+  primary: string;
+  /** Secondary color */
+  secondary: string;
+  /** Success color */
+  success: string;
+  /** Warning color */
+  warning: string;
+  /** Error color */
+  error: string;
+  /** Background color */
+  background: string;
+  /** Text color */
+  text: string;
+  /** Grid color */
+  grid: string;
+  /** Border color */
+  border: string;
+}
+
+/**
  * Represents a page route in the application.
  */
 export interface PageRoute {
@@ -203,16 +417,6 @@ export interface DashboardWidget {
  * Supported chart types for Recharts integration.
  */
 export type ChartType = 'line' | 'bar' | 'area' | 'pie' | 'scatter' | 'gauge';
-
-/**
- * Represents a single data point for charting (Recharts compatible).
- */
-export interface ChartData {
-  /** X-axis value (e.g., timestamp, category) */
-  x: string | number;
-  /** Y-axis value(s) (e.g., measurement, value) */
-  [key: string]: number | string;
-}
 
 /**
  * Generic API response type for REST endpoints.
