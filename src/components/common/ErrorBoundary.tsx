@@ -1,43 +1,52 @@
-import React from 'react';
+import { Component } from 'react';
+import type { ReactNode } from 'react';
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
+interface Props {
+  children: ReactNode;
 }
 
-interface ErrorBoundaryState {
+interface State {
   hasError: boolean;
-  error?: Error;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error to monitoring service if needed
-    // console.error(error, errorInfo);
+  componentDidCatch() {
+    // Log error to console or error reporting service
+    console.error('Error caught by boundary');
   }
-
-  handleReset = () => {
-    this.setState({ hasError: false, error: undefined });
-  };
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-          <h1 className="text-3xl font-bold text-red-700 mb-2">Something went wrong.</h1>
-          <p className="text-gray-700 mb-4">An unexpected error occurred. Please try again or contact support if the problem persists.</p>
-          <button onClick={this.handleReset} className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition">Try Again</button>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <h1 className="text-xl font-semibold text-gray-800 mb-2">
+              Something went wrong
+            </h1>
+            <p className="text-gray-600 mb-4">
+              We're sorry, but something unexpected happened. Please try refreshing the page.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Refresh Page
+            </button>
+          </div>
         </div>
       );
     }
+
     return this.props.children;
   }
 }

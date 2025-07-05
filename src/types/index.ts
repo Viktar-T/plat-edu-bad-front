@@ -22,9 +22,90 @@ export interface Equipment {
 }
 
 /**
+ * Detailed equipment information for the Equipment Detail Page
+ */
+export interface EquipmentDetail extends Equipment {
+  /** Full description of the equipment */
+  description: string;
+  /** Main equipment photo path */
+  photoPath: string;
+  /** Equipment specifications */
+  specifications: EquipmentSpecification[];
+  /** Technical specifications */
+  technicalSpecs: TechnicalSpecification[];
+  /** Control capabilities */
+  controls?: EquipmentControl[];
+  /** Related equipment IDs */
+  relatedEquipment?: string[];
+  /** Installation date */
+  installationDate: string;
+  /** Manufacturer information */
+  manufacturer: string;
+  /** Model number */
+  model: string;
+  /** Serial number */
+  serialNumber: string;
+}
+
+/**
+ * Equipment specification item
+ */
+export interface EquipmentSpecification {
+  /** Specification name */
+  name: string;
+  /** Specification value */
+  value: string | number;
+  /** Unit of measurement */
+  unit?: string;
+  /** Category for grouping */
+  category?: string;
+}
+
+/**
+ * Technical specification with expandable details
+ */
+export interface TechnicalSpecification {
+  /** Specification name */
+  name: string;
+  /** Specification value */
+  value: string | number;
+  /** Unit of measurement */
+  unit?: string;
+  /** Detailed description */
+  description?: string;
+  /** Whether this is an advanced/technical spec */
+  isAdvanced?: boolean;
+}
+
+/**
+ * Equipment control interface
+ */
+export interface EquipmentControl {
+  /** Control ID */
+  id: string;
+  /** Control name */
+  name: string;
+  /** Control type */
+  type: 'button' | 'toggle' | 'slider' | 'input';
+  /** Current value */
+  value: any;
+  /** Available options for select/toggle controls */
+  options?: { label: string; value: any }[];
+  /** Min/max values for slider controls */
+  min?: number;
+  max?: number;
+  /** Step value for slider controls */
+  step?: number;
+  /** Whether the control is enabled */
+  enabled: boolean;
+  /** Description of what the control does */
+  description: string;
+}
+
+/**
  * Enum for equipment operational status.
  */
-export type EquipmentStatus = 'online' | 'offline' | 'error' | 'maintenance';
+export type EquipmentStatus = 'online' | 'offline' | 'error' | 'maintenance' | 'warning';
 
 /**
  * Represents real-time sensor data for a piece of equipment.
@@ -34,6 +115,44 @@ export interface EquipmentData {
   timestamp: string;
   /** Key-value pairs for sensor readings (e.g., voltage, current, temperature) */
   [key: string]: number | string;
+}
+
+/**
+ * Historical data for charts
+ */
+export interface HistoricalData {
+  /** Data point timestamp */
+  timestamp: string;
+  /** Voltage reading */
+  voltage?: number;
+  /** Current reading */
+  current?: number;
+  /** Power reading */
+  power?: number;
+  /** Temperature reading */
+  temperature?: number;
+  /** Efficiency percentage */
+  efficiency?: number;
+  /** Status indicator */
+  status?: string;
+}
+
+/**
+ * Chart configuration for equipment data visualization
+ */
+export interface ChartConfig {
+  /** Chart title */
+  title: string;
+  /** Chart type */
+  type: ChartType;
+  /** Data key to display */
+  dataKey: string;
+  /** Y-axis label */
+  yAxisLabel: string;
+  /** Color for the chart */
+  color: string;
+  /** Unit of measurement */
+  unit: string;
 }
 
 /**
