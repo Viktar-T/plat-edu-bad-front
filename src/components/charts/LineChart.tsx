@@ -15,27 +15,38 @@ import ChartWrapper from './ChartWrapper';
 import { formatTimestamp, getDefaultColors } from '../../utils/chartUtils';
 import type { LineChartProps } from '../../types';
 
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: Array<{
+    color?: string;
+    name?: string;
+    value?: number | string;
+    dataKey?: string;
+  }>;
+  label?: string | number;
+  units?: Record<string, string>;
+  tooltipFormatter?: (value: number | string, name: string) => string;
+};
+
 /**
  * Custom tooltip component for line charts
  */
-const CustomTooltip = ({ 
-  active, 
-  payload, 
-  label, 
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
   units = {},
-  tooltipFormatter 
-}: any) => {
+  tooltipFormatter
+}: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-        <p className="text-sm text-gray-600 mb-2">
-          {formatTimestamp(label)}
-        </p>
-        {payload.map((entry: any, index: number) => (
+        <p className="text-sm text-gray-600 mb-2">{label}</p>
+        {payload.map((entry, index) => (
           <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
-            {entry.name}: {tooltipFormatter 
-              ? tooltipFormatter(entry.value, entry.name)
-              : `${entry.value}${units[entry.dataKey] || ''}`
+            {entry.name}: {tooltipFormatter
+              ? tooltipFormatter(entry.value ?? '', entry.name ?? '')
+              : `${entry.value}${units[entry.dataKey ?? ''] || ''}`
             }
           </p>
         ))}

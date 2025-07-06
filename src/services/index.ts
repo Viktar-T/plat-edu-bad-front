@@ -33,7 +33,8 @@ export const equipmentService = {
   /**
    * Send control command to equipment
    */
-  async sendControlCommand(_equipmentId: string, _controlId: string, _value: any): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async sendControlCommand(_equipmentId: string, _controlId: string, _value: string | number | boolean): Promise<boolean> {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     

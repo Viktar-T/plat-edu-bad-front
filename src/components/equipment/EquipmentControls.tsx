@@ -3,7 +3,7 @@ import type { EquipmentControl } from '../../types';
 
 interface EquipmentControlsProps {
   controls: EquipmentControl[];
-  onControlChange: (controlId: string, value: any) => Promise<boolean>;
+  onControlChange: (controlId: string, value: string | number | boolean) => Promise<boolean>;
   className?: string;
 }
 
@@ -13,11 +13,11 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
   className = ''
 }) => {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
-  const [controlValues, setControlValues] = useState<Record<string, any>>(
+  const [controlValues, setControlValues] = useState<Record<string, string | number | boolean>>(
     controls.reduce((acc, control) => ({ ...acc, [control.id]: control.value }), {})
   );
 
-  const handleControlChange = async (controlId: string, value: any) => {
+  const handleControlChange = async (controlId: string, value: string | number | boolean) => {
     setLoadingStates(prev => ({ ...prev, [controlId]: true }));
     
     try {
@@ -40,7 +40,7 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
       case 'button':
         return (
           <button
-            onClick={() => handleControlChange(control.id, !currentValue)}
+            onClick={() => handleControlChange(control.id, !(currentValue as boolean))}
             disabled={!control.enabled || isLoading}
             className={`px-4 py-2 rounded-md font-medium transition-colors ${
               control.enabled && !isLoading
@@ -66,17 +66,17 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={currentValue}
+                checked={currentValue as boolean}
                 onChange={(e) => handleControlChange(control.id, e.target.checked)}
                 disabled={!control.enabled || isLoading}
                 className="sr-only"
                 aria-label={control.description}
               />
               <div className={`w-11 h-6 rounded-full transition-colors ${
-                currentValue ? 'bg-blue-600' : 'bg-gray-300'
+                currentValue as boolean ? 'bg-blue-600' : 'bg-gray-300'
               } ${!control.enabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 <div className={`w-5 h-5 bg-white rounded-full shadow transform transition-transform ${
-                  currentValue ? 'translate-x-5' : 'translate-x-0'
+                  currentValue as boolean ? 'translate-x-5' : 'translate-x-0'
                 }`}></div>
               </div>
             </label>
@@ -87,19 +87,22 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
           </div>
         );
 
-      case 'slider':
+      case 'slider': {
+        const sliderValue = typeof currentValue === 'number' ? currentValue : 0;
+        const min = control.min ?? 0;
+        const max = control.max ?? 100;
         return (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium text-gray-700">{control.name}</label>
-              <span className="text-sm text-gray-500">{currentValue}</span>
+              <span className="text-sm text-gray-500">{sliderValue}</span>
             </div>
             <input
               type="range"
-              min={control.min}
-              max={control.max}
+              min={min}
+              max={max}
               step={control.step}
-              value={currentValue}
+              value={sliderValue}
               onChange={(e) => setControlValues(prev => ({ ...prev, [control.id]: parseFloat(e.target.value) }))}
               onMouseUp={(e) => handleControlChange(control.id, parseFloat((e.target as HTMLInputElement).value))}
               onKeyUp={(e) => {
@@ -112,16 +115,17 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
                 !control.enabled ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               style={{
-                background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((currentValue - (control.min || 0)) / ((control.max || 100) - (control.min || 0))) * 100}%, #E5E7EB ${((currentValue - (control.min || 0)) / ((control.max || 100) - (control.min || 0))) * 100}%, #E5E7EB 100%)`
+                background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((sliderValue - min) / (max - min)) * 100}%, #E5E7EB ${((sliderValue - min) / (max - min)) * 100}%, #E5E7EB 100%)`
               }}
               aria-label={control.description}
             />
             <div className="flex justify-between text-xs text-gray-500">
-              <span>{control.min}</span>
-              <span>{control.max}</span>
+              <span>{min}</span>
+              <span>{max}</span>
             </div>
           </div>
         );
+      }
 
       case 'input':
         return (
@@ -129,7 +133,7 @@ const EquipmentControls: React.FC<EquipmentControlsProps> = ({
             <label className="text-sm font-medium text-gray-700">{control.name}</label>
             <input
               type="text"
-              value={currentValue}
+              value={currentValue as string}
               onChange={(e) => setControlValues(prev => ({ ...prev, [control.id]: e.target.value }))}
               onBlur={() => handleControlChange(control.id, currentValue)}
               onKeyDown={(e) => {

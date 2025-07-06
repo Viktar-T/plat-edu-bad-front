@@ -93,7 +93,7 @@ const EquipmentDetail: React.FC = () => {
   };
 
   // Handle control changes
-  const handleControlChange = async (controlId: string, value: any): Promise<boolean> => {
+  const handleControlChange = async (controlId: string, value: string | number | boolean): Promise<boolean> => {
     if (!equipment) return false;
 
     try {

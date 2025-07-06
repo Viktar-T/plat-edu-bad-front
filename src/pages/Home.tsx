@@ -20,7 +20,9 @@ const NavCard: React.FC<NavCardProps> = ({ title, description, to, icon, accentC
   const handleClick = () => {
     setLoading(true);
     setTimeout(() => {
-      navigate(to);
+      // Use the base path for navigation
+      const base = import.meta.env.BASE_URL || '/';
+      navigate(base.replace(/\/$/, '') + to);
     }, 250);
   };
 

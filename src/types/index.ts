@@ -88,9 +88,9 @@ export interface EquipmentControl {
   /** Control type */
   type: 'button' | 'toggle' | 'slider' | 'input';
   /** Current value */
-  value: any;
+  value: string | number | boolean;
   /** Available options for select/toggle controls */
-  options?: { label: string; value: any }[];
+  options?: { label: string; value: string | number | boolean }[];
   /** Min/max values for slider controls */
   min?: number;
   max?: number;
@@ -212,7 +212,7 @@ export interface LineChartProps extends BaseChartProps {
   /** Units for each data key */
   units?: Record<string, string>;
   /** Custom tooltip formatter */
-  tooltipFormatter?: (value: any, name: string) => string;
+  tooltipFormatter?: (value: number | string, name: string) => string;
   /** Export options */
   exportOptions?: ChartExportOptions;
 }
@@ -234,7 +234,7 @@ export interface BarChartProps extends BaseChartProps {
   /** Units for each data key */
   units?: Record<string, string>;
   /** Custom tooltip formatter */
-  tooltipFormatter?: (value: any, name: string) => string;
+  tooltipFormatter?: (value: number | string, name: string) => string;
   /** Export options */
   exportOptions?: ChartExportOptions;
 }
@@ -256,7 +256,7 @@ export interface PieChartProps extends BaseChartProps {
   /** Outer radius (0-1) */
   outerRadius?: number;
   /** Custom tooltip formatter */
-  tooltipFormatter?: (value: any, name: string) => string;
+  tooltipFormatter?: (value: number | string, name: string) => string;
   /** Export options */
   exportOptions?: ChartExportOptions;
 }
@@ -276,7 +276,7 @@ export interface AreaChartProps extends BaseChartProps {
   /** Units for each data key */
   units?: Record<string, string>;
   /** Custom tooltip formatter */
-  tooltipFormatter?: (value: any, name: string) => string;
+  tooltipFormatter?: (value: number | string, name: string) => string;
   /** Export options */
   exportOptions?: ChartExportOptions;
 }
@@ -326,7 +326,7 @@ export interface MultiAxisChartProps extends BaseChartProps {
   /** Units for each data key */
   units?: Record<string, string>;
   /** Custom tooltip formatter */
-  tooltipFormatter?: (value: any, name: string) => string;
+  tooltipFormatter?: (value: number | string, name: string) => string;
   /** Export options */
   exportOptions?: ChartExportOptions;
 }
@@ -421,7 +421,7 @@ export type ChartType = 'line' | 'bar' | 'area' | 'pie' | 'scatter' | 'gauge';
 /**
  * Generic API response type for REST endpoints.
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   /** Indicates if the request was successful */
   success: boolean;
   /** Data payload (generic) */
@@ -435,7 +435,7 @@ export interface ApiResponse<T = any> {
 /**
  * API response for paginated lists.
  */
-export interface PaginatedResponse<T = any> extends ApiResponse<T[]> {
+export interface PaginatedResponse<T = unknown> extends ApiResponse<T[]> {
   /** Current page number */
   page: number;
   /** Total number of pages */

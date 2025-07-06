@@ -34,13 +34,22 @@ const RealTimeChart: React.FC<RealTimeChartProps> = ({
     });
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  type CustomTooltipProps = {
+    active?: boolean;
+    payload?: Array<{
+      name?: string;
+      value?: number | string;
+    }>;
+    label?: string;
+  };
+
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const dataPoint = payload[0];
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="text-sm text-gray-600">
-            {formatTimestamp(label)}
+            {formatTimestamp(label ?? '')}
           </p>
           <p className="text-sm font-medium">
             {dataPoint.name}: {dataPoint.value} {config.unit}

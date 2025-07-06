@@ -11,27 +11,39 @@ import ChartWrapper from './ChartWrapper';
 import { getDefaultColors } from '../../utils/chartUtils';
 import type { PieChartProps } from '../../types';
 
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: Array<{
+    color?: string;
+    name?: string;
+    value?: number | string;
+    dataKey?: string;
+  }>;
+  label?: string | number;
+  tooltipFormatter?: (value: number | string, name: string) => string;
+};
+
 /**
  * Custom tooltip component for pie charts
  */
-const CustomTooltip = ({ 
-  active, 
-  payload, 
-  tooltipFormatter 
-}: any) => {
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+  tooltipFormatter
+}: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const data = payload[0];
     return (
       <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-        <p className="text-sm font-medium" style={{ color: data.color }}>
-          {data.name}
-        </p>
-        <p className="text-sm text-gray-600">
-          {tooltipFormatter 
-            ? tooltipFormatter(data.value, data.name)
-            : `${data.value} (${data.payload.percent?.toFixed(1)}%)`
-          }
-        </p>
+        <p className="text-sm text-gray-600 mb-2">{label}</p>
+        {payload.map((entry, index) => (
+          <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
+            {entry.name}: {tooltipFormatter
+              ? tooltipFormatter(entry.value ?? '', entry.name ?? '')
+              : `${entry.value}`
+            }
+          </p>
+        ))}
       </div>
     );
   }
@@ -41,17 +53,29 @@ const CustomTooltip = ({
 /**
  * Custom label component for pie charts
  */
+type CustomLabelProps = {
+  cx?: number;
+  cy?: number;
+  midAngle?: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  percent?: number;
+  value?: number;
+  showPercentage?: boolean;
+  showValue?: boolean;
+};
+
 const CustomLabel = ({ 
-  cx, 
-  cy, 
-  midAngle, 
-  innerRadius, 
-  outerRadius, 
-  percent, 
-  value,
+  cx = 0, 
+  cy = 0, 
+  midAngle = 0, 
+  innerRadius = 0, 
+  outerRadius = 80, 
+  percent = 0, 
+  value = 0,
   showPercentage = true,
   showValue = false
-}: any) => {
+}: CustomLabelProps) => {
   const RADIAN = Math.PI / 180;
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
