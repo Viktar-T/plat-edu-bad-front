@@ -24,26 +24,59 @@ const NavCard: React.FC<NavCardProps> = ({ title, description, to, icon, accentC
     }, 250);
   };
 
+  // Create static class maps for proper Tailwind CSS purging
+  const accentColorClasses = {
+    blue: {
+      border: 'hover:border-blue-400',
+      ring: 'focus:ring-blue-200',
+      text: 'text-blue-600',
+      textHover: 'group-hover:text-blue-800',
+      bg: 'bg-blue-100',
+      bgHover: 'group-hover:bg-blue-200',
+      spinnerBorder: 'border-blue-600'
+    },
+    green: {
+      border: 'hover:border-green-400',
+      ring: 'focus:ring-green-200',
+      text: 'text-green-600',
+      textHover: 'group-hover:text-green-800',
+      bg: 'bg-green-100',
+      bgHover: 'group-hover:bg-green-200',
+      spinnerBorder: 'border-green-600'
+    },
+    purple: {
+      border: 'hover:border-purple-400',
+      ring: 'focus:ring-purple-200',
+      text: 'text-purple-600',
+      textHover: 'group-hover:text-purple-800',
+      bg: 'bg-purple-100',
+      bgHover: 'group-hover:bg-purple-200',
+      spinnerBorder: 'border-purple-600'
+    }
+  };
+
+  const colors = accentColorClasses[accentColor as keyof typeof accentColorClasses] || accentColorClasses.blue;
+
   return (
     <button
       onClick={handleClick}
-      className={`group relative w-full md:w-[22rem] bg-white rounded-2xl shadow-xl border border-gray-200 px-10 py-12 flex flex-col items-center justify-center transition-all duration-200 hover:shadow-2xl hover:border-${accentColor}-400 focus:outline-none focus:ring-4 focus:ring-${accentColor}-200 mb-6 md:mb-0`}
+      className={`group relative w-full md:w-[22rem] bg-white rounded-2xl shadow-xl border border-gray-200 px-10 py-12 flex flex-col items-center justify-center transition-all duration-200 hover:shadow-2xl ${colors.border} focus:outline-none focus:ring-4 ${colors.ring} mb-6 md:mb-0`}
       aria-label={title}
       disabled={loading}
       tabIndex={0}
       style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, sans-serif' }}
     >
-      <div className={`mb-6 text-6xl text-${accentColor}-600`} aria-hidden="true">
+      <div className={`mb-6 text-6xl ${colors.text}`} aria-hidden="true">
         {icon}
       </div>
       <h2 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-blue-700 transition-colors text-center">{title}</h2>
       <p className="text-gray-700 mb-8 text-base text-center max-w-xs">{description}</p>
-      <span className={`mt-2 flex items-center justify-center w-14 h-14 rounded-full bg-${accentColor}-100 group-hover:bg-${accentColor}-200 transition-colors`} aria-hidden="true">
-        <ArrowRight className={`w-8 h-8 text-${accentColor}-600 group-hover:text-${accentColor}-800 transition-colors`} />
+      <span className={`mt-2 flex items-center justify-center w-14 h-14 rounded-full ${colors.bg} ${colors.bgHover} transition-colors`} aria-hidden="true">
+        <ArrowRight className={`w-8 h-8 ${colors.text} ${colors.textHover} transition-colors`} />
       </span>
       {loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80 rounded-2xl">
-          <span className={`animate-spin h-10 w-10 border-4 border-${accentColor}-600 border-t-transparent rounded-full`}></span>
+          <span className={`animate-spin h-10 w-10 border-4 ${colors.spinnerBorder} border-t-transparent rounded-full`}></span>
         </div>
       )}
     </button>

@@ -1,5 +1,4 @@
 // Barrel export for services
-export {};
 
 // Equipment service functions
 export const equipmentService = {
