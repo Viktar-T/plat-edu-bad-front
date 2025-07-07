@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Map, BarChart2, ArrowRight, PieChart } from 'lucide-react';
+import eduBadPlat from '../assets/edu-bad-plat.png';
 
 /**
  * Navigation card props for the Home page.
@@ -20,9 +21,7 @@ const NavCard: React.FC<NavCardProps> = ({ title, description, to, icon, accentC
   const handleClick = () => {
     setLoading(true);
     setTimeout(() => {
-      // Use the base path for navigation
-      const base = import.meta.env.BASE_URL || '/';
-      navigate(base.replace(/\/$/, '') + to);
+      navigate(to);
     }, 250);
   };
 
@@ -91,6 +90,14 @@ const Home: React.FC = () => {
           accentColor="purple"
         />
       </section>
+      {/* Platform Diagram Image */}
+      <div className="w-full flex justify-center mb-8">
+        <img
+          src={eduBadPlat}
+          alt="Educational Platform Diagram"
+          className="max-w-xs md:max-w-md lg:max-w-lg w-full h-auto rounded-xl shadow-md border border-gray-200"
+        />
+      </div>
     </main>
   );
 };
